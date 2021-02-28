@@ -15,9 +15,10 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "license", schema = "public")
+@Table(name = "user", schema = "public")
 public class User {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @NotNull
@@ -25,14 +26,18 @@ public class User {
     private String email;
 
     @NotNull
-    @Column(name = "user_type")
-    private String userType;
+    @Column(name = "person_type")
+    private String personType;
 
     @NotNull
     @Column(name = "password")
     private String password;
 
-    @OneToMany(mappedBy = "license", cascade = CascadeType.ALL)
+    @NotNull
+    @Column(name = "cert_count")
+    private Integer certCount;
+
+    @OneToMany
     private List<License> license;
 
     public String getEmail() {

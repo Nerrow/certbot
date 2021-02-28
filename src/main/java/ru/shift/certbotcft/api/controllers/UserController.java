@@ -27,9 +27,9 @@ public class UserController {
         return ResponseEntity.ok(userService.getAllUsers());
     }
 
-    @PostMapping
-    @ResponseStatus(code = HttpStatus.CREATED)
-    public void add(@ResponseBody User user){
-        userService.add(user);
-    }
+//    @PostMapping
+//    @ResponseStatus(code = HttpStatus.CREATED)
+//    public void add(@ResponseBody User user){
+//        userService.add(user);
+//    }
 }

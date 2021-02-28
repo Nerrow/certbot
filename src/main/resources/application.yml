@@ -6,9 +6,9 @@ spring:
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: org.postgresql.Driver
-    url:
+    url: jdbc:postgresql://localhost:5432/certbot
     username: postgres
-    password: 123
+    password: 2223404egor
     hikari:
       pool-name: fl-pool
       minimum-idle: 5

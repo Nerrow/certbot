@@ -10,5 +10,5 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends CrudRepository<User, Integer>, JpaRepository<User, Integer> {
     Optional<User> findByEmail(String email);
-    Optional<User> findById(Integer Id);
+    Optional<User> findById(Long Id);
 }
