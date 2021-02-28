@@ -6,7 +6,7 @@ spring:
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/certbot
+    url: jdbc:postgresql://194.32.248.42:5432/certbot
     username: postgres
     password: 2223404egor
     hikari:
@@ -22,6 +22,7 @@ spring:
     generate-ddl: false
     hibernate:
       use-new-id-generator-mappings: true
+      #ddl-auto: create
     properties:
       hibernate:
         format_sql: true
@@ -29,6 +30,6 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQL10Dialect
 
 server:
-  port: 9000
+  port: 5000
 
 

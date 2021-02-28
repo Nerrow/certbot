@@ -18,7 +18,6 @@ import javax.persistence.*;
 @Table(name = "license", schema = "public")
 public class License {// rename
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
     @NotNull

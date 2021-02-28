@@ -37,8 +37,13 @@ public class User {
     @Column(name = "cert_count")
     private Integer certCount;
 
-    @OneToMany
-    private List<License> license;
+//    @OneToMany
+//    @JoinTable(
+//            name = "user_licens",
+//            joinColumns = @JoinColumn(name = "user_id"),
+//            inverseJoinColumns = @JoinColumn(name = "license_id")
+//    )
+//    private  List<License> licenseId;
 
     public String getEmail() {
         return email;

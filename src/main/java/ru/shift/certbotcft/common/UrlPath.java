@@ -1,4 +1,4 @@
-package ru.shift.certbotcft.api.common;
+package ru.shift.certbotcft.common;
 
 import lombok.experimental.UtilityClass;
 
@@ -11,7 +11,6 @@ public class UrlPath {
     public static final String USER_ID = USER + "/{userId}";
     public static final String LICENSE = API_PATH_PREFIX + "/license";
     public static final String LICENSE_ID = LICENSE + "/{license_id}";
-
 
 }
 
