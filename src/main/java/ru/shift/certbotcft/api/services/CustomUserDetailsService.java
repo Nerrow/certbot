@@ -27,7 +27,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         String passw = Encryption.encryption(user.getPassword(), 1);
         System.out.println(passw);
         System.out.println(Encryption.encryption(passw, 2));
-        return new org.springframework.security.core.userdetails.User(user.getEmail(), Encryption.encryption(user.getPassword(),2),new ArrayList<>());
+        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(),new ArrayList<>());
 
     }
 }

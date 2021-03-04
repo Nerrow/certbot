@@ -6,18 +6,13 @@ import org.springframework.stereotype.Service;
 import ru.shift.certbotcft.api.repository.LicenseRepository;
 import ru.shift.certbotcft.common.utils.Encryption;
 
+import java.security.interfaces.RSAKey;
 import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.List;
 
 @Service
 public class LicenseService {
-    private final LicenseRepository licenseRepository;
-
-    @Autowired
-    public LicenseService(LicenseRepository licenseRepository) {
-        this.licenseRepository = licenseRepository;
-    }
 
     private int validateMessage(String msg) {
         int digitalMessage = 0;
@@ -43,9 +38,8 @@ public class LicenseService {
     private HashMap<String, Integer> getRSAPrimeNumbers(String email) {
         HashMap<String, Integer> primeNumbers = new HashMap<>();
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-        int p = (int) timestamp.getTime() % 1509 + 100;
+        int p = (int) (timestamp.getTime() % 1509) + 100;
         int q = 0;
-
         for (Character sym : email.toCharArray()) {
             q += (int) sym;
         }
@@ -67,12 +61,7 @@ public class LicenseService {
     }
 
     private int GCD(int a, int b) {
-        while (b != 0) {
-            int tmp = a % b;
-            a = b;
-            b = tmp;
-        }
-        return a;
+        return b == 0 ? a : GCD(b, a % b);
     }
 
     private int[] extendedGCD(int num1, int num2) {
@@ -94,8 +83,16 @@ public class LicenseService {
     }
 
     private int multiplicativeInverse(int a, int m) {
-        int[] extGCDResult = extendedGCD(a, m);
-        return extGCDResult[1] % m;
+//        int[] extGCDResult = extendedGCD(a, m);
+//        System.out.println(-4484 % 54);
+//        return extGCDResult[1] % m;
+        a = a % m;
+
+        for (int x = 1; x < m; ++x)
+            if ((a * x) % m == 1) {
+                return x;
+            }
+        return 1;
     }
 
     private int getPublicExponent(int p, int q) {
@@ -108,28 +105,29 @@ public class LicenseService {
     }
 
     private int encode(int msg, int[] publicKey) {
-        return (int) (Math.pow(msg, publicKey[0]) % publicKey[1]);
+        return ((int) Math.pow(msg, publicKey[0])) % publicKey[1];
     }
 
-    private int decode(Integer encodedMsg, int[] privateKey) {
-        return (int) (Math.pow(encodedMsg, privateKey[0]) % privateKey[1]);
+    private int decode(int encodedMsg, int[] privateKey) {
+        return ((int) Math.pow(encodedMsg, privateKey[0])) % privateKey[1];
     }
 
-
-    public HashMap<String, int[]> getKeys(String email) {
+    public HashMap<String, int[]> createKeys(String email) {
         HashMap<String, Integer> primeRSANumbers = getRSAPrimeNumbers(email);
         int p = primeRSANumbers.get("p");
         int q = primeRSANumbers.get("q");
         int RSAModule = p * q;
+        int publicExponent = getPublicExponent(p, q);
 
+        System.out.println(primeRSANumbers);
         HashMap<String, int[]> keys = new HashMap<>();
         int[] publicKey = new int[2];
         int[] privateKey = new int[2];
 
-        publicKey[0] = getPublicExponent(p, q);
+        publicKey[0] = publicExponent;
         publicKey[1] = RSAModule;
 
-        privateKey[0] = multiplicativeInverse(getPublicExponent(p, q), eulerFunction(p, q));
+        privateKey[0] = multiplicativeInverse(publicExponent, eulerFunction(p, q));
         privateKey[1] = RSAModule;
 
         keys.put("publicKey", publicKey);
@@ -137,7 +135,15 @@ public class LicenseService {
         return keys;
     }
 
-//    public String validateLicense(String msg, String email, int[] publicKey, int[] privateKey) {
-//
-//    }
+    public boolean validateLicense(int[] publicKey, int[] privateKey) {
+        int msg = validateMessage(Integer.toString(1 + (int) (Math.random() * 100)));
+
+        int encodedMsg = encode(msg, publicKey);
+        int decodedMsg = decode(encodedMsg, privateKey);
+        System.out.println(msg);
+        System.out.println(encodedMsg);
+        System.out.println(decodedMsg);
+
+        return msg == decodedMsg;
+    }
 }
